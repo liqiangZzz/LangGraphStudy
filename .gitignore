@@ -1,0 +1,19 @@
+# PyCharm IDE 配置文件夹
+.idea/
+vscode/
+
+# Python 缓存文件
+__pycache__/
+*.pyc
+*.pyo
+
+# 虚拟环境
+venv/
+env/
+.venv/
+ENV/
+.env
+
+# 其他常见忽略
+*.log
+.DS_Store
