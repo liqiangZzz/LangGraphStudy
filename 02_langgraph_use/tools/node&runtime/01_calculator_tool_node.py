@@ -100,20 +100,18 @@ graph_builder.add_edge("tool_node", "llm_call")
 
 graph = graph_builder.compile()
 
-# 输出Graph 图/工作流为 PNG
-png_data = graph.get_graph().draw_mermaid_png()
+if __name__ == "__main__":
+    # 输出 Graph 图/工作流为 PNG
+    png_data = graph.get_graph().draw_mermaid_png()
 
-with open("calculator_tool_node.png", "wb") as f:
-    f.write(png_data)
-print("图片已保存到 calculator_tool_node.png")
+    with open("calculator_tool_node.png", "wb") as f:
+        f.write(png_data)
+    print("图片已保存到 calculator_tool_node.png")
 
-# ============ 5. 调用图/工作流 ===========
+    # ============ 5. 调用图/工作流 ===========
+    result = graph.invoke({"messages": [HumanMessage(content="帮我计算 （3+5）*2 的结果")]})
 
-result = graph.invoke({"messages": [HumanMessage(content="帮我计算 （3+5）*2 的结果")]})
+    print("result:", result)
 
-# result = agent.invoke({"messages":[{"role":"user","content":"帮我计算 （3+5）*2 的结果"}]})
-
-print("result:", result)
-
-for msg in result["messages"]:
-    msg.pretty_print()
+    for msg in result["messages"]:
+        msg.pretty_print()
