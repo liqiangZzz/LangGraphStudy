@@ -17,3 +17,12 @@ ENV/
 # 其他常见忽略
 *.log
 .DS_Store
+
+# LangGraph dev server 运行时产生的检查点 / store 数据
+.langgraph_api/
+
+# Python 打包构建产物
+*.egg-info/
+build/
+dist/
+.eggs/

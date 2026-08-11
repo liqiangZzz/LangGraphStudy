@@ -1,0 +1,10 @@
+{
+  "$schema": "https://langgra.ph/schema.json",
+  "dependencies": ["."],
+  "graphs": {
+    "my_agent": "./02_langgraph_use/langsmith/agent_demo.py:agentx",
+    "my_graph": "./02_langgraph_use/tools/node&runtime/01_calculator_tool_node.py:graph"
+  },
+  "env": ".env",
+  "image_distro": "wolfi"
+}
