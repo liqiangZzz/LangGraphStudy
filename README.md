@@ -17,10 +17,11 @@ LangGraphStudy/
 │   ├── 01_email_triage_command.py             # 邮件分类：Command 实现路由
 │   ├── 02_email_triage_conditional_edges_list.py  # 邮件分类：条件边 + 列表（返回真实节点名）
 │   ├── 03_email_triage_conditional_edges_dict.py  # 邮件分类：条件边 + 字典（业务标签映射节点）
-│   ├── workflow_patterns/                     # 5 种工作流编排模式
+│   ├── workflow_patterns/                     # 6 种工作流编排模式
 │   │   ├── 01_prompt_chaining.py              # 提示词链：串行多步骤
 │   │   ├── 02_parallelization.py              # 并行化：多子任务同时执行再汇总
 │   │   ├── 03_routing.py                      # 路由：分类后互斥分流
+│   │   ├── 03_routing_multi.py                # 多分类路由：一次出多类，并行走多分支再汇总
 │   │   ├── 04_orchestrator_worker.py          # 编排者-工人：动态 fan-out/fan-in
 │   │   └── 05_evaluator_optimizer.py          # 评估器-优化器：生成-评估-反馈循环
 │   ├── tools/                                 # 工具调用（ToolNode / ToolRuntime）
@@ -100,13 +101,14 @@ python 02_langgraph_use/langsmith/graph_client.py
 
 ## 工作流模式一览
 
-`02_langgraph_use/workflow_patterns/` 下的 5 个模式：
+`02_langgraph_use/workflow_patterns/` 下的 6 个模式：
 
 | 模式 | 一句话说明 |
 |------|-----------|
 | **提示词链** (Prompt Chaining) | 把复杂任务拆成多个串联小步骤，上一步输出作为下一步输入 |
 | **并行化** (Parallelization) | 拆成互不依赖的子任务同时执行，再由汇总节点收口 |
 | **路由** (Routing) | 先分类，再通过条件边只走其中一条分支（互斥分流） |
+| **多分类路由** (Routing Multi) | 一次分类出多个类型，条件边返回多节点名并行执行再汇总（路由+并行） |
 | **编排者-工人** (Orchestrator-Worker) | 动态拆分任务 + 并行执行 + 汇总（fan-out / fan-in） |
 | **评估器-优化器** (Evaluator-Optimizer) | 生成-评估-反馈循环，直到达标 |
 
