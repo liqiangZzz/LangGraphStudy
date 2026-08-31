@@ -89,7 +89,7 @@ langgraph dev
 启动后（默认 `http://127.0.0.1:2024`），可通过 `02_langgraph_use/langsmith/graph_client.py` 用 SDK 客户端流式调用：
 
 ```bash
-python 02_langgraph_use/langsmith/graph_client.py
+python 02_langgraph_use/_langsmith/graph_client.py
 ```
 
 `langgraph.json` 中注册的内容：
