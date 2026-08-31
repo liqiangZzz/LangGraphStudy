@@ -1,16 +1,28 @@
 """
-编排者-工人（Orchestrator-Worker）：一个 LLM 负责把任务动态拆分成若干子任务，
-再派发多个 Worker 并行执行，最后汇总成最终结果。
-区别于固定并行：子任务数量在运行时才确定（动态 fan-out / fan-in）。
+编排者-工人（Orchestrator-Worker）模式：动态任务分解与并行执行
+
+【核心流程】
+用户给定一个主题 → Orchestrator（规划者）根据主题复杂度动态拆解成 N 个章节任务
+→ 通过 Send 动态派发给 N 个 Worker（工人）并行写作各章节
+→ 所有 Worker 完成后自动 fan-in 汇总 → Synthesizer（合成者）整合成最终报告
 
 整体流程：
-    START -> orchestrator(规划章节) -> [动态 fan-out] -> worker×N(并行写各章节) -> [fan-in] -> synthesize(汇总) -> END
+    START → orchestrator(规划章节) → [动态 fan-out] → worker×N(并行写各章节)
+    → [fan-in] → synthesize(汇总) → END
 
-本例最难理解的三个点：
-    - Send：用来"动态生成"多个并行 worker 的入口，每个 Send 对应一个 worker 实例；
-    - 双状态：主流程用 ReportState，单个 worker 用 WorkerState（只关心自己那一个章节）；
-    - operator.add：多个 worker 并行返回结果时，LangGraph 用它把列表自动拼接，而不是互相覆盖。
+【三个核心难点】
+1. Send：用于"动态生成"多个并行 Worker 的入口，每个 Send 对应一个 Worker 实例，
+   实现运行时才确定的动态 fan-out（区别于固定并行度）
+2. 双状态设计：主流程用 ReportState（全局视角），单个 Worker 用 WorkerState（只关心自己那一个章节），
+   实现职责隔离，互不干扰
+3. operator.add：多个 Worker 并行返回结果时，LangGraph 用它自动拼接列表，
+   实现 fan-in 汇总（默认行为是互相覆盖，加了 operator.add 变成累加合并）
+
+【适用场景】
+适合"先规划、再并行执行、最后汇总"的任务，如：多章节报告生成、多文件代码生成、
+多维度数据分析、批量信息处理等。
 """
+
 import operator
 from typing import TypedDict, Annotated
 
