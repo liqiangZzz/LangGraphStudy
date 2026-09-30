@@ -264,7 +264,7 @@ graph_builder.add_edge(START,"orchestrator")
 graph_builder.add_conditional_edges( "orchestrator", assign_workers, ["worker"])
 
 # worker -> synthesize：
-# 注意：虽然这里有 N 个 worker 并行，但 LangGraph 会等所有 worker 都完成（隐式 barrier）后，
+# 注意：虽然这里有 N 个 worker 并行，但 LangGraph 会等所有 worker 都完成后，
 # 才执行 synthesize；worker 返回的 completed_sections 也已通过 operator.add 合并好。
 graph_builder.add_edge( "worker", "synthesize")
 
